@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "mocha tests/unit/**/*.js"
+    "test": "mocha tests/unit/**/*.js",
+    "test:integration": "echo Hello World && exit 0"
   },
   "author": "Paul Mcilwaine",
   "license": "MIT",
