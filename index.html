@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Title</title>
+<style>
+svg {
+    border: 1px solid #000;
+}
+svg.moving {
+    cursor: move;
+}
+
+.selected {
+    stroke: #121199;
+    stroke-width: 2px;
+    stroke-dasharray: 10px 2px;
+}
+
+</style>
+</head>
+<body>
+
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" preserveAspectRatio="xMinYMax meet">
+    <circle id="circle" cx="50" cy="50" r="5"></circle>
+
+    <rect x="-80" y="300" width="100" height="90"></rect>
+
+</svg>
+
+<canvas id="canvas" width="1000" height="1000" style="display: none"></canvas>
+
+<script>
+(function (window, undefined) {
+
+    var circle = document.querySelector('#circle'), moveViewport = false, moveElement = false,
+        viewport = [0, 0, 1000, 1000], prevPosition = {x: 0, y: 0},
+        element = null, elementPosition = {x: 0, y: 0}, elementCoords = [0, 0];
+
+    var svg = document.querySelector('svg');
+
+    svg.addEventListener('mousedown', function (event) {
+        if (event.target.tagName === 'svg') {
+            moveViewport = true;
+            prevPosition.x = event.clientX;
+            prevPosition.y = event.clientY;
+            svg.classList.add('moving');
+        } else if (event.target.tagName === 'circle') {
+            moveElement = true;
+            elementPosition.x = event.clientX;
+            elementPosition.y = event.clientY;
+            element = event.target;
+            elementCoords[0] = parseInt(element.getAttribute('cx'));
+            elementCoords[1] = parseInt(element.getAttribute('cy'));
+            element.classList.add('selected');
+        } else {
+            moveElement = true;
+            elementPosition.x = event.clientX;
+            elementPosition.y = event.clientY;
+            element = event.target;
+            elementCoords[0] = parseInt(element.getAttribute('x'));
+            elementCoords[1] = parseInt(element.getAttribute('y'));
+            element.classList.add('selected');
+        }
+    });
+
+    svg.addEventListener('mouseup', function () {
+        if (moveViewport) {
+            moveViewport = false;
+            svg.classList.remove('moving');
+        } else if (moveElement) {
+            element.classList.remove('selected');
+            moveElement = false;
+            element = null;
+        }
+    });
+
+    svg.addEventListener('mousemove', function (event) {
+        if (moveViewport) {
+            viewport[0] -= event.clientX - prevPosition.x;
+            viewport[1] -= event.clientY - prevPosition.y;
+
+            prevPosition.x = event.clientX;
+            prevPosition.y = event.clientY;
+
+            svg.setAttribute('viewBox', viewport.join(' '));
+        } else if (moveElement && element !== null) {
+            elementCoords[0] += event.clientX - elementPosition.x;
+            elementCoords[1] += event.clientY - elementPosition.y;
+
+            elementPosition.x = event.clientX;
+            elementPosition.y = event.clientY;
+
+            if (element.tagName === 'circle') {
+                element.setAttribute('cx', (elementCoords[0]).toString());
+                element.setAttribute('cy', (elementCoords[1]).toString());
+            } else {
+                element.setAttribute('x', (elementCoords[0]).toString());
+                element.setAttribute('y', (elementCoords[1]).toString());
+            }
+        }
+    });
+
+    svg.addEventListener('wheel', function (event) {
+        if (event.wheelDelta !== 0) {
+            if (event.wheelDelta > 0) {
+                viewport[2] = viewport[3] = Math.max(100, viewport[2] - Math.abs(event.wheelDelta / 2));
+            } else if (event.wheelDelta < 0) {
+                viewport[2] = viewport[3] = Math.min(1000, viewport[2] + Math.abs(event.wheelDelta / 2));
+            }
+
+            svg.setAttribute('viewBox', viewport.join(' '));
+        }
+    });
+
+    // just a test
+    document.querySelector('body').addEventListener('keydown', function (event) {
+        if (event.keyCode === 82) {
+            var rect = document.createElementNS(svg.namespaceURI, 'rect');
+            rect.setAttribute('x', (Math.ceil(Math.random() * (1000 - -500) + -500)).toString());
+            rect.setAttribute('y', (Math.ceil(Math.random() * (1000 - -500) + -500)).toString());
+            rect.setAttribute('width', '250');
+            rect.setAttribute('height', '100');
+            svg.appendChild(rect);
+        }
+    });
+
+}(window));
+</script>
+
+</body>
+</html>
