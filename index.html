@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <title>Title</title>
 <style>
+
 svg {
     border: 1px solid #000;
 }
@@ -16,10 +17,18 @@ svg.moving {
     stroke-width: 2px;
     stroke-dasharray: 10px 2px;
 }
+    
+img {
+    cursor: copy;
+}
 
 </style>
 </head>
 <body>
+
+<div>
+    <img src="icons/Application-Services_AmazonSQS_queue.svg" draggable="true">
+</div>
 
 <svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1000" viewBox="0 0 1000 1000" preserveAspectRatio="xMinYMax meet">
     <circle id="circle" cx="50" cy="50" r="5"></circle>
@@ -38,6 +47,37 @@ svg.moving {
         element = null, elementPosition = {x: 0, y: 0}, elementCoords = [0, 0];
 
     var svg = document.querySelector('svg');
+
+    var divImg = document.querySelector('div');
+
+    divImg.addEventListener('dragstart', function (event) {
+        console.log('start', event);
+    }, false);
+
+    divImg.addEventListener('dragmove', function (event) {
+        console.log('moving', event);
+    }, false);
+
+    divImg.addEventListener('dragend', function (event) {
+        event.preventDefault();
+        console.log('end', event);
+    }, false);
+
+    document.addEventListener('dragenter', function (event) {
+        event.preventDefault();
+        if (event.target.tagName === 'svg') {
+            console.log('drag enter', event);
+        }
+    }, false);
+
+    document.addEventListener('dragover', function (event) {
+        event.preventDefault();
+    }, false);
+
+    document.addEventListener('drop', function (event) {
+        event.preventDefault();
+        console.log('drop', event);
+    }, false);
 
     svg.addEventListener('mousedown', function (event) {
         if (event.target.tagName === 'svg') {
@@ -62,7 +102,7 @@ svg.moving {
             elementCoords[1] = parseInt(element.getAttribute('y'));
             element.classList.add('selected');
         }
-    });
+    }, false);
 
     svg.addEventListener('mouseup', function () {
         if (moveViewport) {
@@ -73,7 +113,7 @@ svg.moving {
             moveElement = false;
             element = null;
         }
-    });
+    }, false);
 
     svg.addEventListener('mousemove', function (event) {
         if (moveViewport) {
@@ -99,7 +139,7 @@ svg.moving {
                 element.setAttribute('y', (elementCoords[1]).toString());
             }
         }
-    });
+    }, false);
 
     svg.addEventListener('wheel', function (event) {
         if (event.wheelDelta !== 0) {
@@ -111,7 +151,7 @@ svg.moving {
 
             svg.setAttribute('viewBox', viewport.join(' '));
         }
-    });
+    }, false);
 
     // just a test
     document.querySelector('body').addEventListener('keydown', function (event) {
@@ -123,7 +163,7 @@ svg.moving {
             rect.setAttribute('height', '100');
             svg.appendChild(rect);
         }
-    });
+    }, false);
 
 }(window));
 </script>
