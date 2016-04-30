@@ -1,15 +1,24 @@
 {
   "name": "cloudformation",
   "version": "0.1.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Cloudformation is a designer tool to create Cloudformation templates and Architecture Diagrams",
+  "main": "src/app.js",
   "scripts": {
     "test": "mocha tests/unit/**/*.js",
-    "test:integration": "echo Hello World && exit 0"
+    "lint": "eslint ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pmcilwaine/cloudformation"
   },
   "author": "Paul Mcilwaine",
   "license": "MIT",
   "devDependencies": {
-    "mocha": "^2.4.5"
+    "eslint": "^1.10.3",
+    "mocha": "2.4.5",
+    "webpack": "^1.12.13"
+  },
+  "dependencies": {
+    "ace-editor-builds": "1.2.0"
   }
 }

@@ -4,17 +4,21 @@ Ability to draw your cloudformation stack and download the template for use, and
 
 Data Structure
 
-JSON should be the same as the Cloudformation stack (actually this is mandatory).
+Use the cloudformation data structure.
 
-It needs to be translated to and from but lets work on translating to JSON from internal data structure.
+We will support the following Anatomy of Cloudformation scripts to start off with.
 
-```
-[
-    {
-        "id": "some arbitrary id format",
-        
+Support only a single template to begin with.
+
+{
+    "Metadata": {
+        "": {
+        }
+    },
+    "Resources": {
     }
-]
-```
+}
 
 ![Build Status](https://travis-ci.org/pmcilwaine/cloudformation.svg?branch=master)
+
+- Use ACE editor

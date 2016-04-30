@@ -1,0 +1,7 @@
+{
+  "extends": "eslint:recommended",
+  "globals": {
+    "describe": true,
+    "it": true
+  }
+}
